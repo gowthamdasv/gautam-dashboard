@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>index.html</title>
+<style>
+:root{--p:#7c3aed;--p2:#c4b5fd;--bg:#0b0914;--ink:#f5f3ff;--muted:#a19cbc;--line:#2a2545;--red:#fb7185;--amb:#fcd34d;--grn:#6ee7b7;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:radial-gradient(1100px 600px at 85% -10%,rgba(124,58,237,.18),transparent 60%),var(--bg);color:var(--ink);min-height:100vh}
+.hidden{display:none!important}
+#login{min-height:100vh;display:flex;align-items:center;justify-content:center;background:radial-gradient(900px 500px at 50% 0%,rgba(124,58,237,.35),transparent 70%),var(--bg);padding:20px}
+.lbox{background:linear-gradient(180deg,#171329,#120F21);border:1px solid var(--line);border-radius:18px;padding:32px 28px;width:100%;max-width:360px;box-shadow:0 30px 80px rgba(0,0,0,.5)}
+label{display:block;font-size:12px;color:var(--muted);margin:12px 0 6px;font-weight:600}
+input{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:10px;font-size:14px;background:#1a1632;color:var(--ink)}
+input:focus{outline:2px solid #8b5cf6}
+input.cell{width:76px;padding:6px 8px;font-size:13px;text-align:right}
+.btn{width:100%;margin-top:20px;padding:12px;border:0;border-radius:10px;background:linear-gradient(135deg,#7c3aed,#a78bfa);color:#fff;font-weight:600;font-size:15px;cursor:pointer;box-shadow:0 8px 20px rgba(124,58,237,.35)}
+.err{color:var(--red);font-size:13px;margin-top:10px;min-height:18px;text-align:center}
+.brand{display:flex;align-items:center;gap:10px;color:#fff;font-weight:700;font-size:20px}
+.brand-lg{justify-content:center;font-size:24px}
+.tag{font-size:12px;color:#8a84a8;text-align:center;margin:4px 0 22px;letter-spacing:.4px;text-transform:uppercase}
+header{position:sticky;top:0;z-index:5;background:rgba(11,9,20,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.ttl{font-size:16px;font-weight:600;padding-left:14px;border-left:1px solid var(--line)}
+nav{display:flex;gap:6px;flex-wrap:wrap}
+nav button{border:1px solid var(--line);color:var(--muted);background:transparent;padding:7px 12px;border-radius:8px;cursor:pointer;font-size:13px}
+nav button.on{background:linear-gradient(135deg,#7c3aed,#a78bfa);color:#fff;border-color:transparent;font-weight:600}
+main{max-width:1120px;margin:0 auto;padding:20px}
+h2{font-size:13px;color:var(--p2);text-transform:uppercase;letter-spacing:.05em;margin:26px 0 10px}
+.panel{background:linear-gradient(180deg,#171329,#120F21);border:1px solid var(--line);border-radius:12px;padding:16px;overflow-x:auto}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.card{background:linear-gradient(180deg,#171329,#120F21);border:1px solid var(--line);border-radius:12px;padding:14px}
+.l{font-size:12px;color:var(--muted)}
+.v{font-size:21px;font-weight:650;margin-top:6px}
+.hn{font-size:12px;color:var(--muted);margin-top:4px}
+.bar,.track{height:8px;background:#241f3d;border-radius:99px;margin-top:10px;overflow:hidden}
+.bar i,.track i{display:block;height:100%;background:linear-gradient(90deg,#7c3aed,#c4b5fd)}
+.target{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;background:linear-gradient(135deg,rgba(124,58,237,.4),rgba(167,139,250,.15));border:1px solid #6d28d9;border-radius:12px;padding:18px 20px}
+.target span{font-size:14px;font-weight:700;color:#e9e3ff;text-transform:uppercase;letter-spacing:.06em}
+.target b{font-size:28px;color:#fff;font-weight:800}
+.frow{display:grid;grid-template-columns:150px 1fr 150px;gap:10px;align-items:center;font-size:13px;margin:9px 0}
+.best{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.bold{font-weight:700;color:#fff}
+.good{color:var(--grn)}.bad{color:var(--red)}.warn{color:var(--amb)}
+table{width:100%;border-collapse:collapse;font-size:13px;min-width:900px}
+th,td{padding:9px 8px;border-bottom:1px solid #221d3a;text-align:right;white-space:nowrap}
+th{font-size:11px;color:#8a84a8;text-transform:uppercase}
+th:first-child,td:first-child{text-align:left}
+tbody tr.rr{cursor:pointer}
+tbody tr.rr:hover td{background:#1c1833}
+.nm{color:#c4b5fd;font-weight:600;text-decoration:underline;text-underline-offset:3px}
+.st{text-align:left;white-space:normal;min-width:260px}
+.tg{display:inline-block;font-size:11px;padding:2px 7px;border-radius:6px;margin:2px}
+.r{background:rgba(251,113,133,.12);color:#fda4af;border:1px solid rgba(251,113,133,.3)}
+.a{background:rgba(251,191,36,.1);color:#fcd34d;border:1px solid rgba(251,191,36,.3)}
+.g{background:rgba(52,211,153,.12);color:#6ee7b7;border:1px solid rgba(52,211,153,.3)}
+.note{font-size:12px;color:#7d7799;margin-top:10px}
+ul.tips{margin:6px 0 0;padding-left:18px;font-size:13px;line-height:1.7}
+.inp{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}
+@media(max-width:760px){.best{grid-template-columns:1fr}.frow{grid-template-columns:110px 1fr 120px}}
+input.flagbox{border-color:#fb7185 !important;background:rgba(251,113,133,.18) !important}
+</style>
+</head>
+<body>
+
+<section id="login">
+  <form class="lbox" id="lf">
+    <div class="brand brand-lg">Airtribe</div>
+    <div class="tag">Sales Dashboard</div>
+    <label for="u">Login name</label>
+    <input id="u" autocomplete="username" placeholder="Enter your login name">
+    <label for="p">Passcode</label>
+    <input id="p" type="password" autocomplete="current-password" placeholder="Enter passcode">
+    <button class="btn" type="submit">Sign in</button>
+    <div class="err" id="err"></div>
+  </form>
+</section>
+
+<div id="app" class="hidden">
+  <header>
+    <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+      <div class="brand">Airtribe</div>
+      <div class="ttl">Gautam team</div>
+    </div>
+    <nav>
+      <button data-p="ov" class="on">Overview</button>
+      <button data-p="tm">Team performance</button>
+      <button data-p="as">October plan</button>
+      <button data-p="at">Attendance</button>
+      <button data-p="ld">Lead analysis</button>
+      <button id="lo">Sign out</button>
+    </nav>
+  </header>
+  <main>
+    <section id="p-ov">
+      <div class="target"><span>September revenue target</span><b>₹90,00,000</b></div>
+      <h2>Revenue</h2>
+      <div class="cards" id="rev"></div>
+      <h2>Current funnel (September)</h2>
+      <div class="panel" id="fun"></div>
+      <h2>Best rep</h2>
+      <div class="best" id="best"></div>
+      <div class="note" id="bestNote"></div>
+      <h2>Lead sources (September)</h2>
+      <div class="panel"><table id="src"></table></div>
+      <h2>Weekly trend (September)</h2>
+      <div class="panel"><table id="wk"></table></div>
+    </section>
+
+    <section id="p-tm" class="hidden">
+      <h2>Team performance</h2>
+      <div class="panel"><table id="tt"></table></div>
+      <div class="note">Red = needs improvement. Amber = in track, push more. Green = target met. Individual target is fixed at ₹7,50,000. Click a name for the breakdown.</div>
+      <div id="rd"></div>
+      <h2>What-if: fix the flags below</h2>
+      <div class="panel"><table id="ed"></table></div>
+      <div class="note">Red-outlined boxes are the figures behind the flags. Edit them to see each flag clear and the status move toward 100%. This panel is a what-if copy and does not change the team performance table or the overview. Changing dials recalculates the funnel using this rep's own September conversion rates, so the starting point matches the actual figures. Editing any other figure changes only that figure. Revenue = enrolments × ₹45,000 × (1 − discount). Status shows what still needs to change to reach ₹7,50,000.</div>
+    </section>
+
+    <section id="p-as" class="hidden">
+      <h2>October plan assumptions (fixed, from the sheet)</h2>
+      <div class="panel"><div class="inp" id="ain"></div></div>
+      <h2>Reverse funnel required</h2>
+      <div class="panel" id="afun"></div>
+      <h2>Capacity</h2>
+      <div class="cards" id="acap"></div>
+      <div class="panel" style="margin-top:12px"><ul class="tips" id="atips"></ul></div>
+      <h2>Scenarios (from the sheet)</h2>
+      <div class="panel"><table id="scn"></table></div>
+    </section>
+  <section id="p-ld" class="hidden">
+      <h2>Lead-level sample (400 leads)</h2>
+      <div class="cards" id="ldk"></div>
+      <h2>Speed to first call vs conversion</h2>
+      <div class="panel"><table id="ldb"></table></div>
+      <h2>Lost reasons</h2>
+      <div class="panel"><table id="ldr"></table></div>
+      <h2>By rep (click a name for detail)</h2>
+      <div class="panel"><table id="ldrep"></table></div>
+      <div id="ldDetail"></div>
+      <h2>By source and masterclass</h2>
+      <div class="panel"><table id="ldsrc"></table></div>
+    </section>
+  <section id="p-at" class="hidden">
+      <h2>Attendance: September 2026</h2>
+      <div class="cards" id="atk"></div>
+      <h2>Mark absent days</h2>
+      <div class="panel"><table id="att" style="min-width:1500px"></table></div>
+      <div class="note">Sundays are weekly offs and are not counted (6, 13, 20 and 27 September), which leaves 26 working days. Everyone is marked present by default. Tick a day to mark it absent. The limit is 2 absent days per rep for the month, and anyone over it is flagged.</div>
+    </section>
+  </main>
+</div>
+
+<script>
+const BRAND = '<svg width="30" height="30" viewBox="0 0 40 40" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ddd6fe"/><stop offset="1" stop-color="#7c3aed"/></linearGradient></defs><path d="M3 31 L15 9 L21 20 Z" fill="url(#lg)"/><path d="M15 31 L27 7 L38 31 Z" fill="#a78bfa"/></svg>';
+document.querySelectorAll(".brand").forEach(b => b.insertAdjacentHTML("afterbegin", BRAND));
+
+const PRICE = 45000, SEP_T = 9000000, MAX_DISC = .15, IND_T = 750000, TALK_MIN = 4.54;
+const PLAN = {target:12000000, net:37617, link:.58, attend:.70, booked:.55, connect:.085, dc:.294, dpl:5.2, reps:10, days:24};
+
+// name, tenure, leads, dials, connected calls, booked, attended, payment links, enrolments, avg discount, refunds (7 days)
+const raw = [
+ ["Aarav",18,500,2600,780,70,40,28,18,.12,1],["Neha",14,500,2400,760,72,42,30,20,.10,0],
+ ["Karan",9,500,4200,1050,48,22,12,6,.15,1],["Sneha",22,500,2300,720,80,48,40,27,.24,5],
+ ["Rohan",12,500,2500,760,66,35,24,15,.13,1],["Pooja",16,500,2450,740,70,38,27,17,.11,0],
+ ["Vikram",7,500,2550,750,60,30,20,12,.14,1],["Ananya",11,500,2400,730,68,36,25,16,.12,1],
+ ["Imran",20,500,2350,740,75,42,30,21,.11,0],["Meera",3,500,2500,720,58,30,20,5,.16,0],
+ ["Arjun",2,500,2600,740,55,28,19,4,.18,1],["Tanvi",1,500,2400,700,50,26,17,4,.17,0]
+];
+const KEYS = ["n","tenure","leads","dials","connects","booked","attended","links","enrolled","disc","refunds"];
+const reps = raw.map(a => { const r = Object.fromEntries(a.map((v,i) => [KEYS[i], v])); r.received = 1; return r; });
+const EDIT = [["leads","Leads"],["dials","Dials"],["connects","Connected"],["booked","Booked"],["attended","Attended"],["links","Links"],["enrolled","Enrolled"],["disc","Discount"],["refunds","Refunds"],["received","Received %"]];
+const TALK = {Aarav:62,Neha:70,Karan:38,Sneha:74,Rohan:60,Pooja:66,Vikram:55,Ananya:63,Imran:72,Meera:48,Arjun:45,Tanvi:42};
+reps.forEach(r => r.talk = TALK[r.n]);
+const SRC = [["Meta ads",2700,1080,108,25,486000,933750,.17],["Google search ads",900,540,59,24,378000,918000,.15],["LinkedIn ads",600,372,42,18,390000,696600,.14],["Free GenAI masterclass",1200,840,137,66,300000,2524500,.15],["Organic / website",360,234,29,12,0,469800,.13],["Referral",240,204,42,20,60000,826200,.082]];
+const WK = [["Week 1","1 to 7 Sep",1450,95,28,.08,1159200],["Week 2","8 to 14 Sep",1500,105,34,.10,1377000],["Week 3","15 to 21 Sep",1550,107,38,.11,1521900],["Week 4","22 to 30 Sep",1500,110,65,.21,2310750]];
+const SCN = [["A. Current team, September efficiency","~29,000","~154","₹5.8M","48%"],["B. A + 10 hires on 1 Oct (30% ramp)","~37,000","~195","₹7.3M","61%"],["C. B + efficiency 1.5x","~37,000","~293","₹11.0M","92%"],["D. B + efficiency 1.64x","~37,000","319","₹12.0M","100%"]];
+
+const fmt = n => "₹" + Math.round(n).toLocaleString("en-IN");
+const num = n => Math.round(n).toLocaleString("en-IN");
+const pct = n => (n*100).toFixed(0) + "%";
+const tot = k => reps.reduce((a,r) => a + r[k], 0);
+const repT = () => IND_T;
+function revPerDial(r){ const k = r.rates; return k.dc * k.cb * k.ba * k.al * k.le * PRICE * (1 - r.disc); }
+function needDials(r){ return Math.ceil(IND_T / revPerDial(r)); }
+let sel = null;
+
+function calc(r){
+  const q = (a,b) => b ? a / b : 0;
+  r.rates = {dc:q(r.connects,r.dials), cb:q(r.booked,r.connects), ba:q(r.attended,r.booked), al:q(r.links,r.attended), le:q(r.enrolled,r.links)};
+  r.tpc = q(r.talk * 60, r.connects);
+  r.revenue = r.enrolled * PRICE * (1 - r.disc);
+  r.recvAmt = r.revenue * r.received;
+  r.conv = r.links ? r.enrolled / r.links : 0;
+  r.connRate = r.dials ? r.connects / r.dials : 0;
+  r.bookRate = r.connects ? r.booked / r.connects : 0;
+  r.attRate = r.booked ? r.attended / r.booked : 0;
+  r.ach = r.revenue / repT();
+  return r;
+}
+function flags(r){
+  const red = [], amb = [];
+  const extra = Math.max(0, Math.ceil((IND_T - r.revenue) / revPerDial(r)));
+  if (r.disc > MAX_DISC) red.push(`Discount ${pct(r.disc)} (policy 15%)`);
+  if (r.refunds >= 3) red.push(`${r.refunds} refunds`);
+  if (r.ach < .8) red.push(`Revenue ${pct(r.ach)}: add ${num(extra)} dials`);
+  if (!red.length && r.ach < 1) amb.push(`Push: add ${num(extra)} dials to hit target`);
+  return {red, amb, met: !red.length && r.ach >= 1};
+}
+function statusHTML(f){
+  if (f.met) return '<span class="tg g">Target met</span>';
+  return f.red.map(x => `<span class="tg r">${x}</span>`).join("") + f.amb.map(x => `<span class="tg a">${x}</span>`).join("");
+}
+const achieved = () => reps.reduce((a,r) => a + r.revenue, 0);
+const received = () => reps.reduce((a,r) => a + r.recvAmt, 0);
+
+function show(p){
+  ["ov","tm","as","ld","at"].forEach(x => document.getElementById("p-"+x).classList.toggle("hidden", x !== p));
+  document.querySelectorAll("nav button[data-p]").forEach(b => b.classList.toggle("on", b.dataset.p === p));
+  renderAll();
+}
+document.querySelectorAll("nav button[data-p]").forEach(b => b.onclick = () => show(b.dataset.p));
+document.getElementById("lo").onclick = () => {
+  document.getElementById("app").classList.add("hidden");
+  document.getElementById("login").classList.remove("hidden");
+  document.getElementById("p").value = "";
+};
+document.getElementById("lf").onsubmit = e => {
+  e.preventDefault();
+  if (document.getElementById("u").value.trim() === "Gautam" && document.getElementById("p").value === "DAS123") {
+    document.getElementById("login").classList.add("hidden");
+    document.getElementById("app").classList.remove("hidden");
+    document.getElementById("err").textContent = "";
+    show("ov");
+  } else {
+    document.getElementById("err").textContent = "Incorrect login name or passcode.";
+  }
+};
+
+// Live editing: any change to a rep cell or plan input re-renders the dashboard
+document.addEventListener("input", e => {
+  const t = e.target;
+  if (t.dataset.k) {
+    const r = scen[+t.dataset.r];
+    r[t.dataset.k] = +t.value || 0;
+    if (t.dataset.k === "dials") cascade(r);
+    scenCalc(r);
+    syncEditor();
+  }
+  if (t.dataset.a) { PLAN[t.dataset.a] = +t.value || 0; renderAssume(); }
+});
+
+function cascade(r){
+  const k = r.rates;
+  r.connects = Math.round(r.dials * k.dc);
+  r.booked = Math.round(r.connects * k.cb);
+  r.attended = Math.round(r.booked * k.ba);
+  r.links = Math.round(r.attended * k.al);
+  r.enrolled = Math.round(r.links * k.le);
+  r.talk = r.connects * r.tpc / 60;
+}
+function scenCalc(r){
+  r.revenue = r.enrolled * PRICE * (1 - r.disc);
+  r.ach = r.revenue / IND_T;
+  return r;
+}
+function scenStatus(r){
+  const net = PRICE * (1 - r.disc), short = IND_T - r.revenue;
+  const enrPerDial = r.rates.dc * r.rates.cb * r.rates.ba * r.rates.al * r.rates.le;
+  const tags = [];
+  if (r.revenue >= IND_T) tags.push('<span class="tg g">100% target reached</span>');
+  else tags.push(`<span class="tg r">Short: add ${num(Math.ceil(short / net))} enrolments (≈ ${num(Math.ceil(short / net / enrPerDial))} dials)</span>`);
+  if (r.disc > MAX_DISC) tags.push(`<span class="tg r">Discount above 15% policy</span>`);
+  if (r.revenue > IND_T) tags.push(`<span class="tg g">${((r.revenue / IND_T - 1) * 100).toFixed(0)}% above target</span>`);
+  return tags.join(" ");
+}
+const FIELD_FLAG = (r, k) =>
+  (k === "disc" && r.disc > MAX_DISC) ||
+  (k === "refunds" && r.refunds >= 3) ||
+  ((k === "dials" || k === "enrolled") && r.ach < .8);
+function buildEditor(){
+  const inp = (r, i, k, v, step) => `<td><input class="cell${FIELD_FLAG(r,k)?' flagbox':''}" type="number" step="${step}" data-r="${i}" data-k="${k}" value="${v}"></td>`;
+  document.getElementById("ed").innerHTML =
+    `<tr><th>Rep</th><th>Dials</th><th>Connected calls</th><th>Talk time (hrs)</th><th>Sessions booked</th><th>Sessions attended</th><th>Payment links sent</th><th>Enrollments</th><th>Avg discount</th><th>Refunds within 7 days</th><th>Revenue (₹)</th><th>Achievement</th><th class="st">Flags to fix</th><th class="st">Target status</th></tr>` +
+    scen.map((r,i) => `<tr><td>${r.n}</td>
+      ${inp(r,i,"dials",r.dials,1)}${inp(r,i,"connects",r.connects,1)}${inp(r,i,"talk",r.talk.toFixed(1),0.1)}${inp(r,i,"booked",r.booked,1)}${inp(r,i,"attended",r.attended,1)}${inp(r,i,"links",r.links,1)}${inp(r,i,"enrolled",r.enrolled,1)}${inp(r,i,"disc",r.disc,0.01)}${inp(r,i,"refunds",r.refunds,1)}
+      <td class="dv" data-r="${i}" data-k="revenue">${fmt(r.revenue)}</td>
+      <td class="dv" data-r="${i}" data-k="ach">${pct(r.ach)}</td>
+      <td class="st dv" data-r="${i}" data-k="flags">${statusHTML(flags(r))}</td>
+      <td class="st dv" data-r="${i}" data-k="status">${scenStatus(r)}</td></tr>`).join("");
+}
+function syncEditor(){
+  document.querySelectorAll("#ed input[data-k]").forEach(el => {
+    const r = scen[+el.dataset.r];
+    if (el !== document.activeElement) el.value = r[el.dataset.k];
+    el.classList.toggle("flagbox", FIELD_FLAG(r, el.dataset.k));
+  });
+  document.querySelectorAll("#ed .dv").forEach(td => {
+    const r = scen[+td.dataset.r], k = td.dataset.k;
+    if (k === "status") td.innerHTML = scenStatus(r);
+    else if (k === "flags") td.innerHTML = statusHTML(flags(r));
+    else if (k === "ach") td.textContent = pct(r.ach);
+    else td.textContent = fmt(r.revenue);
+  });
+}
+const AF = [["target","Oct target (₹)",1],["net","Net revenue per enrolment (₹)",1],["link","Link→enrol",.01],["attend","Attended→link",.01],["booked","Booked→attend",.01],["connect","Connect→booked",.001],["dc","Dial→connect",.001],["dpl","Dials per lead",.1],["reps","Reps on 15 Oct",1],["days","Working days",1]];
+function buildPlan(){
+  const fmtVal = (k, v) => k === "target" || k === "net" ? fmt(v) : k === "link" || k === "attend" || k === "booked" ? pct(v) : k === "connect" || k === "dc" ? (v*100).toFixed(1) + "%" : v;
+  document.getElementById("ain").innerHTML = AF.map(([k,l]) =>
+    `<div class="card"><div class="l">${l}</div><div class="v" style="font-size:18px">${fmtVal(k, PLAN[k])}</div></div>`).join("");
+}
+
+function renderOverview(){
+  const A = achieved(), R = received(), P = A - R, ach = A / SEP_T, gap = Math.max(SEP_T - A, 0);
+  const avgNet = A / (tot("enrolled") || 1);
+  document.getElementById("rev").innerHTML = [
+    {l:"Revenue achieved", v:fmt(A), h:"enrolments × price × (1 − discount)"},
+    {l:"Revenue received", v:fmt(R), h:pct(A ? R/A : 0) + " of achieved"},
+    {l:"Revenue pending", v:fmt(P), h:"achieved but not yet received"},
+    {l:"Target achievement", v:pct(ach), h:"of " + fmt(SEP_T), bar:ach},
+    {l:"Yet to achieve", v:fmt(gap), h:"≈ " + Math.ceil(gap/avgNet) + " more enrolments"}
+  ].map(c => `<div class="card"><div class="l">${c.l}</div><div class="v">${c.v}</div><div class="hn">${c.h}</div>${c.bar!==undefined?`<div class="bar"><i style="width:${Math.min(c.bar*100,100)}%"></i></div>`:""}</div>`).join("");
+
+  const L = tot("leads");
+  const steps = [["Leads",L],["Dials",tot("dials")],["Connected calls",tot("connects")],["Sessions booked",tot("booked")],["Sessions attended",tot("attended")],["Payment links",tot("links")],["Enrolments",tot("enrolled")]];
+  document.getElementById("fun").innerHTML = steps.map(([l,v]) =>
+    `<div class="frow"><span>${l}</span><div class="track"><i style="width:${Math.min(v/L*100,100).toFixed(1)}%"></i></div><span style="text-align:right">${num(v)} <span style="color:var(--muted)">(${pct(v/L)})</span></span></div>`).join("");
+
+  const top = [...reps].sort((a,b) => b.revenue - a.revenue)[0];
+  const fb = [...reps].sort((a,b) => (b.enrolled/b.leads) - (a.enrolled/a.leads))[0];
+  const card = (title, r, why) => {
+    const dpe = r.enrolled ? r.dials / r.enrolled : 0;
+    const need = Math.max(repT() - r.revenue, 0);
+    const avg = r.enrolled ? r.revenue / r.enrolled : 0;
+    const enrNeed = avg ? need / avg : 0;
+    return `<div class="panel"><div class="l">${title}</div>
+      <div class="v bold" style="font-size:24px">${r.n}</div><div class="hn">${why}</div>
+      <div class="cards" style="margin-top:12px;grid-template-columns:repeat(2,1fr)">
+        <div><div class="l">Revenue achieved</div><div class="bold">${fmt(r.revenue)}</div></div>
+        <div><div class="l">Achievement</div><div class="bold">${pct(r.ach)}</div></div>
+        <div><div class="l">Dials made</div><div class="bold">${num(r.dials)}</div></div>
+        <div><div class="l">Connected calls</div><div class="bold">${num(r.connects)}</div></div>
+        <div><div class="l">Enrolments</div><div class="bold">${r.enrolled}</div></div>
+        <div><div class="l">Dials per enrolment</div><div class="bold">${dpe ? num(dpe) : "–"}</div></div>
+      </div>
+      <div class="note">${need > 0 ? `To reach ${fmt(repT())}: about ${Math.ceil(enrNeed)} more enrolments, about ${num(enrNeed*dpe)} more dials at this rate.` : `Individual target of ${fmt(repT())} already met.`}</div></div>`;
+  };
+  document.getElementById("best").innerHTML =
+    card("Best by revenue achievement", top, "Highest revenue against individual target") +
+    `<div class="panel"><div class="l">Congratulations</div>
+      <div class="v bold" style="font-size:24px">${fb.n}</div>
+      <p style="font-size:14px;line-height:1.6;color:var(--ink);margin:12px 0">You are the game changer for the team this month. Thank you for building the funnel and setting the pace for everyone else.</p>
+      <div class="card" style="margin-top:12px"><div class="l">Reward</div><div class="v" style="font-size:18px">1 extra paid day off</div><div class="hn">Awarded for the best funnel this month</div></div>
+    </div>`;
+  const flagged = top.disc > MAX_DISC || top.refunds >= 3;
+  document.getElementById("bestNote").textContent = flagged
+    ? `Caution: ${top.n} leads on revenue, but at ${pct(top.disc)} average discount (policy max 15%) with ${top.refunds} refunds in 7 days. Review before crediting.`
+    : "";
+
+  document.getElementById("src").innerHTML =
+    `<tr><th>Source</th><th>Leads</th><th>Contacted</th><th>Contact %</th><th>Enrolled</th><th>Lead→enrol</th><th>Spend</th><th>Cost / enrolment</th><th>Revenue</th><th>Revenue / ₹ spend</th><th>Avg discount</th></tr>` +
+    SRC.map(([s,l,c,att,e,sp,rv,dc]) => `<tr><td>${s}</td><td>${num(l)}</td><td>${num(c)}</td><td>${pct(c/l)}</td><td>${e}</td><td>${(e/l*100).toFixed(1)}%</td><td>${sp ? fmt(sp) : "₹0"}</td><td>${sp && e ? fmt(sp/e) : "–"}</td><td>${fmt(rv)}</td><td>${sp ? (rv/sp).toFixed(1)+"x" : "–"}</td><td>${(dc*100).toFixed(1)}%</td></tr>`).join("");
+
+  document.getElementById("wk").innerHTML =
+    `<tr><th>Week</th><th>Dates</th><th>Leads</th><th>Attended</th><th>Enrolled</th><th>Avg discount</th><th>Revenue</th></tr>` +
+    WK.map(([w,d,l,at,e,dc,rv]) => `<tr><td>${w}</td><td>${d}</td><td>${num(l)}</td><td>${at}</td><td class="${e>40?'warn':''}">${e}</td><td class="${dc>MAX_DISC?'bad':''}">${pct(dc)}</td><td>${fmt(rv)}</td></tr>`).join("") +
+    `<tr><td colspan="7" class="note" style="text-align:left">Week 4 enrolments rose to 65 at a 21% average discount, above the 15% policy. Leads were flat that week, so the jump lines up with the discount, not with more leads.</td></tr>`;
+}
+
+function renderTeam(){
+  const A = achieved();
+  const head = `<tr><th>Rep</th><th>Tenure (mo)</th><th>Leads</th><th>Dials</th><th>Connected</th><th>Booked</th><th>Attended</th><th>Links</th><th>Enrolled</th><th>Link→Enrol</th><th>Revenue</th><th>Achv %</th><th>Disc.</th><th>Refunds</th><th class="st">Status</th></tr>`;
+  const rows = reps.map((r,i) => {
+    const f = flags(r);
+    return `<tr class="rr" onclick="pick(${i})">
+      <td><span class="nm">${r.n}</span></td><td>${r.tenure}</td><td>${r.leads}</td><td>${num(r.dials)}</td><td>${num(r.connects)}</td><td>${r.booked}</td><td>${r.attended}</td><td>${r.links}</td><td>${r.enrolled}</td>
+      <td class="${r.conv<.6?'bad':'good'}">${pct(r.conv)}</td><td>${fmt(r.revenue)}</td>
+      <td class="${r.ach>=1?'good':r.ach<.8?'bad':'warn'}">${pct(r.ach)}</td>
+      <td class="${r.disc>MAX_DISC?'bad':''}">${pct(r.disc)}</td><td class="${r.refunds>=3?'bad':''}">${r.refunds}</td>
+      <td class="st">${statusHTML(f)}</td></tr>`;
+  }).join("");
+  const total = `<tr style="font-weight:700"><td>Team total</td><td></td><td>${tot("leads")}</td><td>${num(tot("dials"))}</td><td>${num(tot("connects"))}</td><td>${tot("booked")}</td><td>${tot("attended")}</td><td>${tot("links")}</td><td>${tot("enrolled")}</td><td>${pct(tot("links")?tot("enrolled")/tot("links"):0)}</td><td>${fmt(A)}</td><td>${pct(A/SEP_T)}</td><td></td><td>${tot("refunds")}</td><td></td></tr>`;
+  document.getElementById("tt").innerHTML = head + rows + total;
+  renderRD();
+}
+
+function pick(i){ sel = i; renderRD(); document.getElementById("rd").scrollIntoView({behavior:"smooth", block:"start"}); }
+function renderRD(){
+  const el = document.getElementById("rd");
+  if (sel === null) { el.innerHTML = ""; return; }
+  const r = reps[sel], f = flags(r), target = repT();
+  const gap = Math.max(target - r.revenue, 0), pend = r.revenue - r.recvAmt;
+  const funnel = [["Leads",r.leads],["Dials",r.dials],["Connected calls",r.connects],["Sessions booked",r.booked],["Sessions attended",r.attended],["Payment links",r.links],["Enrolments",r.enrolled]];
+  el.innerHTML = `
+    <h2>${r.n}: revenue</h2>
+    <div class="cards">
+      <div class="card"><div class="l">Individual target (fixed)</div><div class="v">${fmt(target)}</div></div>
+      <div class="card"><div class="l">Revenue achieved</div><div class="v">${fmt(r.revenue)}</div><div class="hn">${pct(r.ach)} of target</div><div class="bar"><i style="width:${Math.min(r.ach*100,100)}%"></i></div></div>
+      <div class="card"><div class="l">Yet to achieve</div><div class="v">${fmt(gap)}</div></div>
+      <div class="card"><div class="l">Realization pending</div><div class="v">${fmt(pend)}</div><div class="hn">${pct(r.received)} received</div></div>
+    </div>
+    <h2>${r.n}: funnel</h2>
+    <div class="panel">${funnel.map(([l,v]) => `<div class="frow"><span>${l}</span><div class="track"><i style="width:${Math.min(v/r.leads*100,100).toFixed(1)}%"></i></div><span style="text-align:right">${num(v)} <span style="color:var(--muted)">(${pct(v/r.leads)})</span></span></div>`).join("")}</div>
+    <h2>${r.n}: what to fix and what to push</h2>
+    <div class="panel">
+      <div style="margin-bottom:8px">${f.red.map(x => `<span class="tg r">${x}</span>`).join("") || '<span class="tg g">No red flags</span>'}</div>
+      <div>${f.amb.map(x => `<span class="tg a">${x}</span>`).join("")}</div>
+      <ul class="tips">${f.red.map(x => `<li class="bad">Fix: ${x}</li>`).join("")}${f.met ? '<li class="good">Target met. Keep the pace.</li>' : ""}</ul>
+    </div>`;
+  el.insertAdjacentHTML("beforeend", leadBlock(r.n));
+}
+
+const LEAD_TXT = `M,Imran,84.5,6,L,R,0,0
+M,Pooja,1.9,3,L,R,0,0
+M,Aarav,33.3,1,L,R,0,0
+G,Imran,0.7,3,L,F,0,0
+O,Ananya,45.6,6,L,R,0,0
+M,Ananya,0.8,1,K,,0,0
+F,Sneha,23.1,5,L,X,0,0
+G,Aarav,0.5,2,E,,40500,0
+G,Tanvi,14.5,3,L,R,0,0
+F,Pooja,6.8,6,L,X,0,1
+M,Arjun,0.6,2,L,R,0,0
+M,Karan,7.8,3,L,F,0,0
+M,Aarav,0.3,2,L,R,0,0
+G,Meera,13.8,1,C,,0,0
+M,Pooja,21.3,3,L,X,0,0
+M,Tanvi,23.6,2,L,T,0,0
+M,Rohan,0.7,1,S,,0,0
+M,Ananya,,0,N,,0,0
+L,Pooja,7.6,1,L,F,0,0
+F,Sneha,0.5,1,L,R,0,0
+F,Sneha,0.3,1,L,X,0,1
+G,Vikram,12.9,4,L,T,0,0
+L,Sneha,53.4,1,L,R,0,1
+R,Pooja,0.4,1,S,,0,0
+M,Aarav,62.9,1,L,R,0,1
+O,Aarav,18.6,5,L,R,0,0
+O,Arjun,64.8,1,L,F,0,0
+F,Sneha,31.2,1,L,T,0,1
+M,Imran,6.8,6,C,,0,0
+M,Tanvi,6.9,5,L,I,0,1
+M,Ananya,20.3,1,L,R,0,0
+M,Imran,23.9,2,L,I,0,0
+M,Pooja,5.5,2,L,R,0,0
+F,Vikram,,0,N,,0,0
+M,Karan,0.3,3,L,T,0,0
+M,Pooja,0.2,2,L,X,0,0
+R,Imran,63.2,6,L,R,0,0
+F,Vikram,0.1,3,C,,0,0
+M,Sneha,,0,N,,0,0
+M,Ananya,39.8,4,L,F,0,0
+M,Sneha,49.9,3,L,R,0,0
+M,Meera,,0,N,,0,0
+F,Pooja,15.8,6,L,T,0,1
+M,Sneha,0.8,1,L,R,0,0
+L,Neha,23.8,4,C,,0,0
+M,Tanvi,0.4,1,E,,36000,0
+L,Pooja,95,6,L,T,0,0
+L,Imran,33.9,3,L,R,0,0
+O,Arjun,0.3,2,E,,42750,0
+M,Aarav,25.2,4,L,R,0,0
+M,Karan,6.9,5,L,I,0,0
+F,Arjun,8.2,1,K,,0,1
+M,Ananya,0.3,3,C,,0,0
+L,Rohan,0.2,2,L,R,0,0
+F,Ananya,19.4,4,L,X,0,1
+F,Pooja,0.4,2,L,X,0,1
+M,Imran,0.2,3,K,,0,1
+R,Neha,70.5,4,L,R,0,0
+M,Ananya,1,1,L,I,0,0
+M,Vikram,0.7,1,S,,0,0
+M,Aarav,51.7,1,L,R,0,0
+F,Arjun,0.4,2,E,,38250,1
+F,Imran,,0,N,,0,1
+M,Arjun,0.2,2,L,I,0,0
+M,Tanvi,,0,N,,0,0
+F,Tanvi,0.4,2,L,F,0,1
+F,Arjun,0.4,1,L,R,0,1
+M,Tanvi,0.4,1,C,,0,0
+M,Tanvi,71.8,6,L,R,0,0
+R,Imran,11.9,5,C,,0,0
+M,Imran,0.2,2,L,R,0,1
+O,Meera,23.9,3,S,,0,0
+F,Pooja,0.7,1,L,F,0,1
+M,Vikram,10.9,2,L,X,0,0
+M,Tanvi,14.7,4,L,T,0,0
+F,Karan,0.4,1,L,R,0,1
+M,Aarav,,0,N,,0,0
+M,Tanvi,12.7,4,S,,0,0
+O,Pooja,6.7,4,C,,0,0
+M,Aarav,14.4,5,C,,0,0
+M,Aarav,0.4,3,C,,0,1
+L,Pooja,0.9,3,E,,36000,0
+G,Sneha,11.1,1,C,,0,0
+M,Rohan,28.2,6,L,R,0,0
+M,Aarav,90.7,1,L,R,0,0
+R,Aarav,47.7,3,L,R,0,0
+M,Meera,0.3,3,C,,0,0
+R,Karan,7.3,4,L,X,0,0
+M,Vikram,95.2,1,L,A,0,0
+O,Pooja,1.2,6,L,T,0,0
+G,Karan,75.2,3,L,R,0,0
+R,Vikram,0.4,2,L,T,0,0
+G,Vikram,0.2,3,L,R,0,0
+M,Vikram,23.3,2,S,,0,0
+M,Rohan,20.7,1,L,T,0,0
+F,Imran,,0,N,,0,1
+F,Arjun,74.3,2,L,X,0,1
+F,Meera,0.5,2,L,X,0,1
+O,Vikram,0.9,1,E,,40500,0
+F,Sneha,17.4,1,E,,38250,1
+F,Pooja,7.6,6,E,,38250,0
+M,Ananya,0.2,3,L,F,0,0
+R,Pooja,16.6,5,L,A,0,0
+O,Karan,8.3,2,S,,0,0
+F,Arjun,18.1,2,L,X,0,0
+M,Arjun,94.6,5,L,R,0,0
+M,Imran,0.8,3,L,I,0,0
+F,Aarav,4.6,3,L,R,0,1
+F,Aarav,0.5,3,L,F,0,1
+F,Arjun,0.1,3,L,I,0,1
+F,Karan,,0,N,,0,1
+M,Arjun,0.8,3,L,F,0,0
+G,Pooja,6.4,4,C,,0,0
+M,Sneha,0.7,1,L,R,0,0
+G,Imran,0.3,1,C,,0,0
+M,Neha,22.3,2,L,R,0,0
+F,Vikram,1,4,C,,0,0
+O,Aarav,0.4,1,L,T,0,0
+G,Neha,10.8,2,L,F,0,0
+G,Rohan,24.7,3,L,X,0,0
+M,Karan,0.5,3,L,X,0,0
+M,Vikram,14.2,5,L,R,0,0
+F,Pooja,0.4,2,C,,0,1
+G,Rohan,0.2,2,E,,42750,0
+O,Neha,35.3,1,L,R,0,1
+M,Rohan,13.2,5,L,A,0,0
+O,Arjun,0.1,3,E,,38250,0
+L,Neha,21.6,6,C,,0,0
+M,Aarav,23.3,4,L,T,0,0
+G,Arjun,0.6,3,L,R,0,0
+G,Vikram,12.4,3,L,T,0,0
+M,Arjun,24.5,5,L,F,0,0
+F,Imran,18.6,2,L,X,0,1
+G,Arjun,21.6,6,L,F,0,0
+F,Vikram,52.1,2,L,I,0,1
+G,Tanvi,0.7,2,L,F,0,0
+G,Sneha,3.5,3,L,F,0,0
+M,Rohan,0.9,2,L,R,0,1
+M,Neha,0.6,1,E,,40500,1
+G,Karan,46.6,5,L,R,0,0
+M,Sneha,51.4,1,L,R,0,0
+F,Aarav,1.9,5,E,,33750,1
+M,Aarav,95.3,4,L,R,0,0
+M,Ananya,0.5,3,S,,0,0
+L,Vikram,0.9,1,L,T,0,0
+O,Karan,60.9,5,L,R,0,0
+M,Imran,10.3,4,L,X,0,0
+M,Rohan,87.9,6,L,I,0,0
+M,Tanvi,67.8,6,L,R,0,0
+F,Vikram,50.1,5,L,R,0,1
+L,Ananya,36.6,2,L,X,0,0
+O,Pooja,0.3,1,L,X,0,0
+M,Imran,1,6,C,,0,0
+F,Neha,,0,N,,0,1
+F,Aarav,,0,N,,0,1
+M,Imran,0.6,3,L,R,0,1
+M,Meera,23.1,4,C,,0,0
+M,Sneha,35.4,6,L,R,0,0
+M,Meera,0.3,3,C,,0,0
+G,Karan,0.5,1,C,,0,0
+M,Ananya,12.4,5,L,T,0,0
+M,Pooja,29.4,1,L,R,0,0
+M,Ananya,0.5,2,L,R,0,0
+O,Vikram,31.9,1,L,R,0,0
+M,Tanvi,,0,N,,0,0
+M,Ananya,0.5,2,L,X,0,0
+R,Vikram,13.7,3,E,,38250,0
+G,Meera,,0,N,,0,0
+L,Aarav,2.8,6,S,,0,0
+M,Ananya,6.6,4,C,,0,0
+G,Sneha,22.1,1,L,X,0,0
+M,Aarav,8,3,S,,0,0
+M,Arjun,23.3,1,L,F,0,0
+M,Ananya,7.2,6,L,X,0,0
+M,Neha,8.1,3,S,,0,0
+M,Vikram,0.4,3,L,X,0,0
+L,Tanvi,0.4,3,L,X,0,0
+M,Aarav,0.8,1,L,R,0,0
+M,Meera,62.8,6,L,X,0,0
+G,Arjun,84.2,1,L,R,0,0
+M,Sneha,3.7,1,S,,0,0
+O,Aarav,10.2,1,L,R,0,0
+M,Karan,,0,N,,0,0
+M,Meera,,0,N,,0,0
+M,Ananya,4.1,6,K,,0,0
+M,Arjun,6.2,4,L,T,0,0
+R,Vikram,6.3,5,L,X,0,0
+M,Neha,0.8,3,L,A,0,0
+M,Pooja,60.2,3,L,T,0,1
+M,Neha,0.9,1,L,T,0,0
+G,Aarav,8,1,L,A,0,0
+M,Rohan,9.5,5,L,F,0,1
+O,Neha,27.3,4,L,I,0,0
+F,Neha,11.6,1,L,X,0,1
+G,Rohan,91.1,5,L,R,0,0
+M,Vikram,81.8,4,L,R,0,0
+M,Meera,19.2,1,L,X,0,0
+F,Tanvi,39.6,3,L,R,0,1
+M,Imran,28.9,2,L,F,0,1
+F,Aarav,47.5,5,L,T,0,1
+F,Neha,,0,N,,0,0
+M,Karan,88.8,5,L,I,0,1
+M,Ananya,85.6,5,L,R,0,0
+M,Karan,15.5,3,L,R,0,0
+M,Tanvi,83.7,6,L,F,0,0
+G,Pooja,0.8,3,C,,0,0
+G,Ananya,0.8,1,S,,0,0
+L,Pooja,0.7,1,C,,0,0
+G,Imran,23.8,6,C,,0,0
+F,Neha,,0,N,,0,1
+L,Imran,11.4,5,L,T,0,0
+G,Sneha,31.3,2,L,R,0,0
+M,Rohan,22.7,1,L,X,0,0
+G,Arjun,0.2,1,C,,0,0
+M,Rohan,48.7,4,L,F,0,0
+M,Tanvi,5.6,3,L,R,0,0
+L,Imran,0.4,3,L,R,0,0
+M,Vikram,13.5,5,L,X,0,0
+L,Sneha,9.2,3,L,F,0,0
+M,Imran,0.7,3,L,I,0,0
+M,Rohan,87.1,2,L,R,0,0
+M,Karan,,0,N,,0,0
+M,Aarav,0.6,2,E,,40500,0
+F,Neha,7.2,1,K,,0,0
+F,Neha,13.3,5,L,X,0,0
+M,Vikram,0.5,3,L,X,0,0
+M,Tanvi,0.1,2,L,R,0,0
+M,Tanvi,0.1,1,L,R,0,0
+F,Ananya,59.7,4,L,R,0,0
+L,Tanvi,0.4,3,S,,0,0
+G,Neha,10.4,2,L,X,0,0
+G,Ananya,0.2,2,E,,38250,0
+M,Sneha,81.4,6,L,R,0,0
+L,Arjun,32.9,2,L,I,0,0
+M,Sneha,0.2,3,L,X,0,0
+L,Ananya,58.9,4,L,R,0,0
+R,Imran,26.8,2,L,X,0,0
+F,Sneha,15.2,2,L,T,0,0
+O,Karan,63.2,2,L,F,0,0
+O,Pooja,8.8,3,L,A,0,0
+M,Pooja,51.4,3,L,R,0,1
+M,Ananya,1.6,5,L,R,0,0
+O,Rohan,0.2,3,L,R,0,0
+M,Ananya,58.7,5,L,R,0,0
+M,Meera,3.7,2,L,T,0,0
+M,Vikram,84.2,6,L,R,0,0
+M,Imran,0.9,3,E,,40500,0
+M,Meera,0.9,1,L,T,0,0
+M,Vikram,77.2,3,L,A,0,0
+O,Meera,0.9,1,L,X,0,0
+M,Neha,2.8,5,L,X,0,0
+M,Rohan,55.1,2,L,R,0,0
+M,Rohan,12.6,1,L,X,0,0
+R,Imran,0.2,1,L,X,0,0
+M,Vikram,,0,N,,0,0
+L,Rohan,14,2,L,R,0,0
+G,Sneha,24.5,4,L,R,0,0
+M,Meera,12.2,1,C,,0,0
+G,Arjun,,0,N,,0,0
+G,Meera,31.2,4,L,R,0,0
+F,Arjun,50.4,1,L,R,0,1
+F,Aarav,68.1,3,L,T,0,1
+M,Arjun,13.8,2,L,A,0,0
+F,Imran,21.8,3,S,,0,1
+M,Vikram,0.3,3,L,R,0,0
+M,Meera,4,1,K,,0,0
+G,Vikram,3.4,6,L,R,0,0
+F,Vikram,56.8,4,L,R,0,1
+F,Arjun,22,6,C,,0,0
+M,Tanvi,64.8,2,L,R,0,0
+G,Karan,0.6,1,L,T,0,0
+L,Ananya,0.2,1,E,,36000,0
+G,Arjun,0.6,1,C,,0,0
+F,Ananya,0.2,2,E,,40500,1
+L,Neha,82.5,4,L,R,0,0
+M,Neha,95.2,5,L,T,0,0
+G,Ananya,23,1,C,,0,0
+L,Pooja,11,4,L,T,0,0
+G,Aarav,,0,N,,0,0
+G,Neha,,0,N,,0,0
+M,Neha,18.7,3,L,R,0,0
+M,Aarav,,0,N,,0,0
+M,Aarav,94.5,1,L,R,0,0
+M,Meera,12.3,1,C,,0,0
+M,Arjun,11.8,3,L,R,0,1
+L,Vikram,29.4,2,L,I,0,0
+F,Aarav,75.5,2,L,A,0,1
+F,Karan,0.8,2,C,,0,1
+G,Rohan,,0,N,,0,0
+F,Aarav,13.1,1,L,A,0,1
+F,Imran,1,5,E,,33750,0
+F,Neha,44.7,5,L,F,0,1
+M,Pooja,0.2,1,L,T,0,0
+M,Meera,38.1,3,L,X,0,0
+M,Arjun,94.2,5,L,R,0,0
+R,Neha,95.3,4,L,R,0,0
+M,Neha,0.3,1,L,I,0,0
+G,Sneha,0.8,3,C,,0,0
+L,Rohan,4,2,L,I,0,0
+F,Pooja,,0,N,,0,1
+L,Ananya,68.4,6,L,I,0,0
+M,Ananya,0.8,1,L,F,0,0
+G,Arjun,,0,N,,0,0
+M,Tanvi,0.2,2,L,R,0,0
+M,Rohan,1.7,4,C,,0,0
+M,Aarav,22.7,6,S,,0,0
+F,Tanvi,16.3,3,C,,0,1
+M,Sneha,,0,N,,0,0
+G,Imran,78.3,5,L,R,0,0
+M,Vikram,0.9,3,L,T,0,0
+G,Sneha,51.3,2,L,R,0,0
+M,Pooja,11.5,4,L,R,0,0
+M,Pooja,0.7,3,L,R,0,1
+M,Imran,4,3,L,R,0,0
+M,Neha,0.6,3,E,,36000,0
+M,Ananya,4.9,3,L,R,0,0
+L,Sneha,83.7,5,L,X,0,0
+L,Rohan,0.4,1,L,A,0,0
+M,Neha,1.2,2,C,,0,0
+F,Tanvi,21.3,6,L,R,0,1
+M,Rohan,0.6,2,L,X,0,0
+L,Neha,4,1,L,R,0,0
+G,Imran,95.3,6,L,R,0,0
+M,Vikram,2.8,4,S,,0,0
+F,Ananya,4.2,5,L,X,0,1
+O,Imran,39,3,L,R,0,0
+M,Imran,0.8,3,L,X,0,0
+M,Sneha,0.1,2,L,I,0,0
+F,Pooja,9.4,2,L,X,0,0
+M,Tanvi,4.7,4,C,,0,0
+L,Imran,6.5,1,L,R,0,0
+M,Rohan,0.2,1,S,,0,0
+M,Aarav,9.7,2,S,,0,0
+M,Meera,1,5,L,R,0,1
+F,Meera,0.2,1,C,,0,1
+M,Karan,0.5,1,L,T,0,0
+G,Ananya,20.7,2,L,T,0,0
+M,Aarav,0.2,1,L,T,0,0
+M,Sneha,12.2,5,L,R,0,0
+G,Sneha,81.7,4,L,F,0,0
+M,Karan,0.8,1,L,X,0,0
+G,Karan,0.5,3,L,F,0,1
+F,Sneha,76.9,4,L,T,0,1
+F,Meera,,0,N,,0,1
+F,Karan,0.5,3,C,,0,1
+M,Rohan,77.6,1,L,R,0,0
+L,Neha,16.8,2,L,X,0,0
+M,Vikram,21.4,4,L,F,0,0
+M,Sneha,0.2,3,C,,0,0
+L,Sneha,2.2,4,E,,40500,0
+F,Imran,0.8,2,L,I,0,1
+R,Sneha,75.2,3,L,R,0,0
+F,Tanvi,21,4,L,X,0,1
+F,Vikram,,0,N,,0,1
+G,Tanvi,16.8,5,L,R,0,0
+L,Vikram,22.4,5,L,I,0,0
+M,Arjun,64.5,2,L,R,0,0
+M,Meera,0.5,3,S,,0,0
+M,Sneha,5.9,4,E,,33750,0
+M,Tanvi,0.7,1,L,T,0,0
+G,Tanvi,10.4,3,L,A,0,0
+M,Aarav,64.9,5,L,X,0,0
+F,Sneha,89.3,1,L,R,0,0
+M,Aarav,94.2,3,L,R,0,1
+F,Karan,95.2,1,L,R,0,0
+O,Karan,42.4,2,L,I,0,0
+L,Vikram,81.2,1,L,R,0,0
+M,Pooja,0.7,2,L,T,0,0
+L,Karan,8.6,5,L,A,0,0
+G,Ananya,40.1,1,L,R,0,0
+O,Karan,,0,N,,0,0
+F,Vikram,59,6,L,R,0,0
+M,Aarav,70.7,1,L,R,0,0
+M,Aarav,,0,N,,0,0
+F,Imran,10.6,3,E,,38250,1
+M,Sneha,77.1,3,L,T,0,0
+M,Sneha,15,5,S,,0,0
+L,Ananya,1,4,L,A,0,0
+F,Imran,14.4,2,E,,36000,1
+M,Ananya,0.5,3,C,,0,0
+F,Tanvi,19.9,4,E,,40500,1
+O,Pooja,39.6,2,L,R,0,0
+R,Rohan,87.5,3,L,I,0,0
+G,Vikram,0.5,1,L,I,0,0
+L,Tanvi,9,2,K,,0,0
+F,Meera,12.6,3,S,,0,0
+F,Sneha,33.8,4,L,R,0,1
+M,Tanvi,,0,N,,0,0
+M,Ananya,0.3,3,L,A,0,0
+L,Arjun,3.7,5,K,,0,0
+M,Ananya,60.3,6,L,X,0,0
+M,Rohan,2.3,4,L,T,0,0
+M,Meera,87.8,1,L,R,0,0
+O,Karan,0.2,2,L,R,0,0
+M,Neha,0.5,3,L,F,0,0
+L,Arjun,91.2,2,L,R,0,0
+L,Imran,65.2,6,L,R,0,0
+L,Tanvi,0.5,3,S,,0,0
+F,Ananya,8.1,4,L,X,0,0
+M,Pooja,0.6,2,L,R,0,0`;
+const SRCN = {M:"Meta ads",G:"Google search ads",L:"LinkedIn ads",F:"Free GenAI masterclass",O:"Organic / website",R:"Referral"};
+const RSN = {R:"Not reachable",F:"Prefers free content",X:"Price too high",T:"Not the right time",I:"Not interested",A:"Chose another institute"};
+const STG = {L:"Lost",E:"Enrolled",K:"Payment link sent",S:"Session booked",C:"Contacted",N:"New"};
+const LEADS = LEAD_TXT.trim().split("\n").map(l => {
+  const [s,rep,h,c,st,rs,paid,mc] = l.split(",");
+  return {src:SRCN[s], rep, hrs: h==="" ? null : +h, calls: +c, stage: STG[st], reason: RSN[rs] || "", paid: +paid, mc: mc === "1"};
+});
+const BUCKETS = ["≤1 hour","1–4 hours","4–24 hours","Over 24 hours"];
+const bucket = h => h===null ? null : h<=1 ? BUCKETS[0] : h<=4 ? BUCKETS[1] : h<=24 ? BUCKETS[2] : BUCKETS[3];
+const median = a => { if(!a.length) return null; const s=[...a].sort((x,y)=>x-y), m=s.length>>1; return s.length%2 ? s[m] : (s[m-1]+s[m])/2; };
+const enrolledOf = list => list.filter(x => x.stage==="Enrolled").length;
+const fmtH = h => h===null ? "–" : h<1 ? Math.round(h*60)+" min" : h.toFixed(1)+" h";
+function topReasons(list){
+  const c = {}; list.filter(x => x.reason).forEach(x => c[x.reason] = (c[x.reason]||0) + 1);
+  return Object.entries(c).sort((a,b) => b[1]-a[1]);
+}
+function leadStats(list){
+  const touched = list.filter(x => x.calls > 0);
+  const hrs = touched.map(x => x.hrs).filter(h => h!==null);
+  const within1 = touched.filter(x => x.hrs!==null && x.hrs<=1).length;
+  return {n:list.length, touched:touched.length, within1: touched.length ? within1/touched.length : 0,
+    med: median(hrs), avgCalls: touched.length ? touched.reduce((a,x)=>a+x.calls,0)/touched.length : 0,
+    enrolled: enrolledOf(list), lost: list.filter(x => x.stage==="Lost").length};
+}
+const slow = s => s.med!==null && (s.med>4 || s.within1<.3);
+
+function leadBlock(name){
+  const list = LEADS.filter(x => x.rep===name), s = leadStats(list), tr = topReasons(list.filter(x => x.stage==="Lost"));
+  const cards = [
+    ["Leads in sample", s.n], ["Contacted", s.touched], ["Median time to first call", fmtH(s.med)],
+    ["Reached within 1 hour", pct(s.within1)], ["Avg calls per contacted lead", s.avgCalls.toFixed(1)], ["Enrolled", s.enrolled]
+  ].map(([l,v]) => `<div class="card"><div class="l">${l}</div><div class="v" style="font-size:18px">${v}</div></div>`).join("");
+  return `<h2>${name}: lead-level sample</h2><div class="panel">
+    <div class="cards">${cards}</div>
+    <div style="margin-top:12px">${tr.map(([r,c]) => `<span class="tg a">${r}: ${c}</span>`).join("") || "No lost leads in sample"}</div>
+    <div class="note">${slow(s) ? "Speed to first call needs work: median above 4 hours or under 30% reached within an hour." : "Speed to first call is on track."}</div></div>`;
+}
+
+function leadRep(i){
+  const r = reps[i], list = LEADS.filter(x => x.rep === r.n), s = leadStats(list);
+  const rows = Object.values(SRCN).map(src => {
+    const g = list.filter(x => x.src === src), lost = g.filter(x => x.stage === "Lost"), tr = topReasons(lost)[0];
+    return {src, n: g.length, c: g.filter(x => x.calls > 0).length, e: enrolledOf(g), lost: lost.length,
+      rate: g.length ? enrolledOf(g) / g.length : 0, top: tr ? tr[0] : "–"};
+  });
+  const weak = rows.filter(x => x.n >= 3).sort((a,b) => a.rate - b.rate)[0];
+  const cards = [["Leads", s.n], ["Contacted", s.touched], ["Median time to first call", fmtH(s.med)],
+    ["Reached within 1 hour", pct(s.within1)], ["Enrolled", s.enrolled], ["Lost", s.lost]]
+    .map(([l,v]) => `<div class="card"><div class="l">${l}</div><div class="v" style="font-size:18px">${v}</div></div>`).join("");
+  document.getElementById("ldDetail").innerHTML = `
+    <h2>${r.n}: lead analysis by source</h2>
+    <div class="panel">
+      <div class="cards">${cards}</div>
+      <table style="margin-top:14px">
+        <tr><th>Source</th><th>Leads</th><th>Contacted</th><th>Enrolled</th><th>Lost</th><th>Enrol rate</th><th>Top lost reason</th></tr>
+        ${rows.map(x => `<tr><td>${x.src}</td><td>${x.n}</td><td>${x.c}</td><td>${x.e}</td><td>${x.lost}</td><td class="${x.n && x.rate < .03 ? 'bad' : 'good'}">${x.n ? pct(x.rate) : "–"}</td><td>${x.top}</td></tr>`).join("")}
+      </table>
+      <div class="note">${weak ? `Weakest source: ${weak.src}, ${pct(weak.rate)} enrolment from ${weak.n} leads. Top lost reason there: ${weak.top}.` : "Not enough leads per source to compare."}</div>
+    </div>`;
+  document.getElementById("ldDetail").scrollIntoView({behavior:"smooth", block:"start"});
+}
+
+function renderLeads(){
+  const all = leadStats(LEADS);
+  const cards = [
+    {l:"Leads in sample", v:all.n, h:"lead-level rows"},
+    {l:"Contacted", v:all.touched, h:pct(all.touched/all.n) + " of sample"},
+    {l:"Median time to first call", v:fmtH(all.med), h:pct(all.within1) + " reached within 1 hour"},
+    {l:"Enrolled in sample", v:all.enrolled, h:pct(all.enrolled/all.n) + " of sample"}
+  ];
+  document.getElementById("ldk").innerHTML = cards.map(c => `<div class="card"><div class="l">${c.l}</div><div class="v">${c.v}</div><div class="hn">${c.h}</div></div>`).join("");
+
+  const t = LEADS.filter(x => x.calls > 0);
+  document.getElementById("ldb").innerHTML =
+    `<tr><th>Time to first call</th><th>Contacted leads</th><th>Enrolled</th><th>Enrol rate</th></tr>` +
+    BUCKETS.map(b => { const g = t.filter(x => bucket(x.hrs)===b), e = enrolledOf(g);
+      return `<tr><td>${b}</td><td>${g.length}</td><td>${e}</td><td class="${e/(g.length||1)>=.1?'good':'bad'}">${g.length ? pct(e/g.length) : "–"}</td></tr>`; }).join("") +
+    `<tr><td colspan="4" class="note" style="text-align:left">Leads reached within an hour enrol at a far higher rate than leads called after a day. Speed to first call is the cheapest lever in the funnel.</td></tr>`;
+
+  const lost = LEADS.filter(x => x.stage==="Lost"), lr = topReasons(lost);
+  document.getElementById("ldr").innerHTML =
+    `<tr><th>Lost reason</th><th>Leads</th><th>Share of lost</th></tr>` +
+    lr.map(([r,c]) => `<tr><td>${r}</td><td>${c}</td><td>${pct(c/lost.length)}</td></tr>`).join("") +
+    `<tr><td colspan="3" class="note" style="text-align:left">${lost.length} leads lost in total. Not reachable is the largest reason, so retry rules and call timing matter as much as the pitch.</td></tr>`;
+
+  document.getElementById("ldrep").innerHTML =
+    `<tr><th>Rep</th><th>Leads</th><th>Contacted</th><th>Median time to first call</th><th>Within 1 hour</th><th>Avg calls</th><th>Enrolled</th><th>Lost</th><th>Top lost reason</th><th class="st">Status</th></tr>` +
+    reps.map(r => { const list = LEADS.filter(x => x.rep===r.n), s = leadStats(list), tr = topReasons(list.filter(x => x.stage==="Lost"));
+      return `<tr class="rr" onclick="leadRep(${reps.indexOf(r)})"><td><span class="nm">${r.n}</span></td><td>${s.n}</td><td>${s.touched}</td>
+        <td class="${s.med!==null && s.med>4?'bad':'good'}">${fmtH(s.med)}</td><td class="${s.within1<.3?'bad':'good'}">${pct(s.within1)}</td>
+        <td>${s.avgCalls.toFixed(1)}</td><td>${s.enrolled}</td><td>${s.lost}</td><td>${tr[0] ? tr[0][0] : "–"}</td>
+        <td class="st">${slow(s) ? '<span class="tg r">Speed to first call</span>' : '<span class="tg g">On track</span>'}</td></tr>`; }).join("");
+
+  document.getElementById("ldsrc").innerHTML =
+    `<tr><th>Source / group</th><th>Leads</th><th>Enrolled</th><th>Lost</th><th>Enrol rate</th></tr>` +
+    Object.values(SRCN).map(s => { const g = LEADS.filter(x => x.src===s), e = enrolledOf(g);
+      return `<tr><td>${s}</td><td>${g.length}</td><td>${e}</td><td>${g.filter(x => x.stage==="Lost").length}</td><td>${g.length ? pct(e/g.length) : "–"}</td></tr>`; }).join("") +
+    [true,false].map(m => { const g = LEADS.filter(x => x.mc===m), e = enrolledOf(g);
+      return `<tr><td>${m ? "Attended masterclass" : "Did not attend masterclass"}</td><td>${g.length}</td><td>${e}</td><td>${g.filter(x => x.stage==="Lost").length}</td><td>${pct(e/g.length)}</td></tr>`; }).join("");
+}
+
+const ATT_LIMIT = 2, ATT_DAYS = Array.from({length:30}, (_,i) => i+1).filter(d => new Date(2026, 8, d).getDay() !== 0);
+const absent = {};
+reps.forEach(r => absent[r.n] = new Set());
+function renderAttendance(){
+  const over = reps.filter(r => absent[r.n].size > ATT_LIMIT).length;
+  document.getElementById("atk").innerHTML = [
+    {l:"Reps", v:reps.length, h:"on the team"},
+    {l:"Full attendance", v:reps.filter(r => absent[r.n].size===0).length, h:"no absent days"},
+    {l:"Over the limit", v:over, h:"more than " + ATT_LIMIT + " absent days"}
+  ].map(c => `<div class="card"><div class="l">${c.l}</div><div class="v">${c.v}</div><div class="hn">${c.h}</div></div>`).join("");
+  document.getElementById("att").innerHTML =
+    `<tr><th>Rep</th>${ATT_DAYS.map(d => `<th>${d}</th>`).join("")}<th>Absent</th><th class="st">Status</th></tr>` +
+    reps.map(r => {
+      const n = absent[r.n].size, flagged = n > ATT_LIMIT;
+      return `<tr><td>${r.n}</td>${ATT_DAYS.map(d => `<td><input type="checkbox" data-att="${r.n}" data-day="${d}" ${absent[r.n].has(d) ? "checked" : ""}></td>`).join("")}
+        <td class="${flagged ? 'bad' : ''}">${n}</td>
+        <td class="st">${flagged ? `<span class="tg r">Over limit: ${n} days (max ${ATT_LIMIT})</span>` : '<span class="tg g">Within limit</span>'}</td></tr>`;
+    }).join("");
+}
+document.addEventListener("change", e => {
+  const t = e.target;
+  if (t.dataset.att) {
+    const set = absent[t.dataset.att], d = +t.dataset.day;
+    if (t.checked) set.add(d); else set.delete(d);
+    renderAttendance();
+  }
+});
+
+function renderAssume(){
+  const P = PLAN;
+  const E = P.target / P.net, lk = E / P.link, at = lk / P.attend, bk = at / P.booked, cn = bk / P.connect, di = cn / P.dc, ld = di / P.dpl;
+  const perDay = di / (P.reps * P.days);
+  const sepPerDay = tot("dials") / reps.length / 24;
+  const lever = cn * .01 * P.booked * P.attend * P.link;
+  const steps = [["Leads",ld],["Dials",di],["Connected calls",cn],["Sessions booked",bk],["Sessions attended",at],["Payment links",lk],["Enrolments",E]];
+  document.getElementById("afun").innerHTML = steps.map(([l,v]) =>
+    `<div class="frow"><span>${l}</span><div class="track"><i style="width:${Math.min(v/ld*100,100).toFixed(1)}%"></i></div><span style="text-align:right">${num(v)} <span style="color:var(--muted)">(${pct(v/ld)})</span></span></div>`).join("");
+  document.getElementById("acap").innerHTML = [
+    {l:"Enrolments needed", v:Math.ceil(E), h:"for " + fmt(P.target)},
+    {l:"Dials needed", v:num(di), h:(di/tot("dials")).toFixed(2) + "x September dials"},
+    {l:"Dials per rep per day (required)", v:Math.ceil(perDay), h:P.reps + " reps × " + P.days + " days"},
+    {l:"Dials per rep per day (September)", v:Math.round(sepPerDay), h:"from edited team data"}
+  ].map(c => `<div class="card"><div class="l">${c.l}</div><div class="v">${c.v}</div><div class="hn">${c.h}</div></div>`).join("");
+  document.getElementById("atips").innerHTML = [
+    `Two reps leave on 15 October, so the team drops to ${P.reps} unless hires join. Required pace is ${Math.ceil(perDay)} dials per rep per day against ${Math.round(sepPerDay)} in September.`,
+    `The target needs ${Math.ceil(E)} enrolments, ${Math.ceil(lk)} payment links and ${num(di)} dials. Without new hires or efficiency gains, the sheet's scenarios reach only 48% to 61% of target.`,
+    `Connect→booked is the biggest lever. Each extra point adds about ${lever.toFixed(1)} enrolments at the planning rates.`,
+    `Discount discipline matters too. Week 4 revenue came with a 21% average discount, above the 15% policy.`
+  ].map(t => `<li>${t}</li>`).join("");
+  document.getElementById("scn").innerHTML =
+    `<tr><th>Scenario</th><th>Dials available</th><th>Enrolments</th><th>Revenue</th><th>% of target</th></tr>` +
+    SCN.map(s => `<tr>${s.map((c,i) => `<td${i?'':' style="text-align:left"'}>${c}</td>`).join("")}</tr>`).join("");
+}
+
+function renderAll(){
+  reps.forEach(calc);
+  renderOverview();
+  renderTeam();
+  renderAssume();
+  renderLeads();
+  syncEditor();
+  renderAttendance();
+}
+
+reps.forEach(calc);
+reps.forEach(calc);
+const scen = reps.map(r => ({...r}));
+scen.forEach(scenCalc);
+buildEditor();
+buildPlan();
+renderAttendance();
+renderAssume();
+</script>
+</body>
+</html>
